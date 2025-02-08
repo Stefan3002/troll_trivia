@@ -1,0 +1,111 @@
+{% extends 'trivia/_base.html' %}
+{% block head_content %}
+    {% load static %}
+    <link rel="stylesheet" href={% static 'css/play.css' %}>
+    <link rel="stylesheet" href={% static 'css/home.css' %}>
+
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            const roomName = {{ room_name }};
+            const questionNumber = {{ question_number }};
+          const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+          const playSocket = new WebSocket(`${ws_scheme}://${window.location.host}/ws/play/${roomName}/`);
+
+          playSocket.onmessage = function(e) {
+              const data = JSON.parse(e.data);
+              const message = data.message;
+              if (message.type === 'emoji') {
+                  const emojiDOM = document.querySelector(`.emoji-${message.data}`)
+                  emojiDOM.classList.remove('hidden');
+                    setTimeout(() => {
+                        emojiDOM.classList.add('out');
+                    }, 2000);
+                    setTimeout(() => {
+                        emojiDOM.classList.add('hidden');
+                        emojiDOM.classList.remove('out');
+                    }, 2100);
+              }
+              else
+                  if (message.type === 'troll') {
+                      console.log('Troll message received');
+                  }
+                  else
+                      if (message.type === 'answer') {
+                        if(message.data)
+                            window.location.href = `http://localhost:8000/play?room=${roomName}&question=${questionNumber + 1}`
+                  }
+          };
+
+          playSocket.onclose = function(e) {
+              console.error('Socket closed unexpectedly');
+          };
+
+
+          function sendMessage(message) {
+              console.log('Sending:', message, playSocket);
+              playSocket.send(JSON.stringify({ 'message': message }));
+          }
+
+            document.querySelectorAll('.emoji-btn').forEach(emoji => {
+                const emojiNumberClass = emoji.classList[1];
+
+                emoji.addEventListener('click', () => {
+                          sendMessage({
+                              type: 'emoji',
+                              data: emojiNumberClass.split('-')[1]
+                          });
+                      });
+            })
+
+          document.querySelector('.troll-btn').addEventListener('click', () => {
+              sendMessage({
+                  type: 'troll',
+                  data: 0
+              });
+          });
+          document.querySelector('.next-btn').addEventListener('click', () => {
+              let checkedAnswer = -1
+              document.querySelectorAll('.answer').forEach(answer => {
+                  if (answer.checked)
+                      checkedAnswer = answer.value;
+              });
+              sendMessage({
+                  type: 'question',
+                  questionNumber,
+                  checkedAnswer
+              });
+          });
+        })
+
+    </script>
+{% endblock %}
+{% block page_content %}
+    <section class="home-page">
+        <img class="home-icon" src={% static 'images/Play.svg' %} alt="">
+        <h2 class="site-title">Let's troll!</h2>
+            <ul class="sub-title">
+                {% for question in questions %}
+                    <li>
+                        {{ question.text }}
+                        <ul class="answer-list">
+                            {% for answer in question.answers %}
+                                <li>
+                                    <input class="answer" name="answer" type="radio" value="{{ forloop.counter0 }}">
+                                    {{ answer.text }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+    <h1 class="emoji-1 hidden">asdsd</h1>
+        <a class="btn troll-btn">TROLL!</a>
+        <a class="btn next-btn">Next</a>
+        <div class="btn-container">
+            <img class="svg-icon emoji-1-btn emoji-btn" src={% static 'images/Emoji1.svg' %} alt="">
+            <img class="svg-icon emoji-2-btn emoji-btn" src={% static 'images/Emoji2.svg' %} alt="">
+            <img class="svg-icon emoji-3-btn emoji-btn" src={% static 'images/Emoji3.svg' %} alt="">
+        </div>
+    </section>
+
+{% endblock %}

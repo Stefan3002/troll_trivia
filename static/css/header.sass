@@ -1,0 +1,40 @@
+@import './variables'
+
+.header-section
+  background: whitesmoke
+  width: 50%
+  height: 100vh
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+.site-title
+  font-size: 2em
+  font-weight: bold
+  margin: 0
+.sub-title
+  font-weight: 300
+
+.emoji-svg
+  animation-fill-mode: forwards
+  animation-name: slide-in
+  animation-duration: .15s
+.out
+    animation-fill-mode: forwards
+    animation-name: slide-out
+    animation-duration: .15s
+@keyframes slide-in
+  from
+    opacity: 0
+    transform: translateY(-100px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+
+@keyframes slide-out
+  from
+    transform: translateY(0)
+  to
+    transform: translateY(-100px)
+    opacity: 0

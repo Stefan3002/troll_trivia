@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% block head_content %}
+
+    {% endblock %}
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    {% load static %}
+    <link rel="stylesheet" href={% static 'css/base.css' %}>
+    <link rel="stylesheet" href={% static 'css/header.css' %}>
+
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+        });
+        
+    </script>
+
+</head>
+
+<body>
+<section class="wrapper">
+{% include 'trivia/_header.html' %}
+    {% block page_content %}
+
+{% endblock %}
+</section>
+
+{% include 'trivia/_footer.html' %}
+</body>
+</html>

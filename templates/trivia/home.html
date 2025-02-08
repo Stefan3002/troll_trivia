@@ -1,0 +1,41 @@
+{% extends 'trivia/_base.html' %}
+{% block head_content %}
+    {% load static %}
+    <link rel="stylesheet" href={% static 'css/home.css' %}>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.play-btn').addEventListener('click', () => {
+                const generatedCode = 123
+                window.location.href = `http://localhost:8000/play?room=${generatedCode}&question=0`
+            });
+            document.querySelector('.join-btn').addEventListener('click', () => {
+                const generatedCode = prompt('Enter the room ID please!')
+                window.location.href = `http://localhost:8000/play?room=${generatedCode}&question=0`
+            });
+        });
+
+    </script>
+{% endblock %}
+{% block page_content %}
+    <section class="home-page">
+        <img class="home-icon" src={% static 'images/Question.svg' %} alt="">
+        <h2 class="site-title">How to play</h2>
+        <p class="sub-title">Answer the questions and troll your opponent. </p>
+            <ul class="sub-title">
+                <li>
+                    After <b>3 consecutive correct answers</b>, you get the opportunity to troll your opponent.
+                </li>
+                <li>
+                    The fun is that neither you nor your adversary <b>know when you have been trolled</b> by each other, you only know that the other one has unlocked the ability to troll you.
+                </li>
+                <li>
+                    The question is: <b>did you get trolled</b>?
+                </li>
+            </ul>
+        <div class="btn-container">
+            <a class="btn play-btn">Play</a>
+            <a class="btn join-btn">Join</a>
+        </div>
+    </section>
+
+{% endblock %}
