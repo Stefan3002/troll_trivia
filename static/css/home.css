@@ -1,0 +1,22 @@
+.home-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  padding: 0 1rem;
+  text-align: justify;
+}
+
+.home-icon {
+  width: 190px;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/*# sourceMappingURL=home.css.map */
